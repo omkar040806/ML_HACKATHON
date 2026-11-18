@@ -1,0 +1,18 @@
+{
+ "source": "C:\\Users\\Vedanta\\Desktop\\pathsnap\\results\\hmm\\best_hmm_params.json",
+ "params": {
+  "emission": "blend",
+  "emission_weight": 0.3440544687581887,
+  "sigma_m": 8.417516188299581,
+  "beta_m": 15.79234023701325,
+  "min_prob": 1e-06,
+  "gap_break_s": 60.0,
+  "max_speed_mps": 70.0,
+  "route_search_slack_m": 150.0,
+  "route_search_factor": 3.0,
+  "fill_gap_max_m": 5000.0,
+  "tune_trips": 20,
+  "tune_trials": 25
+ },
+ "model": "random_forest"
+}
