@@ -1,0 +1,73 @@
+# PathSnap shared configuration.
+# Every module reads its settings from here through pathsnap.config.load_config().
+# Owners: each top-level section is owned by the person named in the comment.
+# Change a value only after telling the section owner (see docs/INTERFACES.md).
+
+seed: 42
+
+# ---- Person 1 -------------------------------------------------------------
+paths:
+  data_dir: data/raw            # contains train/, student_test/ and (on demo day) evaluator_test/
+  processed_dir: data/processed # cached candidate/feature tables (git-ignored)
+  results_dir: results          # experiment outputs that ARE committed
+  models_dir: models            # exported model bundle (committed)
+
+partitions:
+  train: train
+  student_test: student_test
+  eval_test: evaluator_test     # folder name as shipped by the organisers; never read during development
+
+cleaning:
+  drop_duplicate_timestamps: true
+
+labels:
+  # GPS observations whose distance to their aligned reference arc exceeds this
+  # are kept for prediction but excluded from label-based metrics/training.
+  max_label_distance_m: 60.0
+
+candidates:
+  radius_m: 50.0                # search radius around each GPS observation
+  max_candidates: 8             # keep the K nearest arcs within the radius
+  sample_spacing_m: 10.0        # densification step for the arc spatial index
+
+features:
+  heading_half_window: 2        # obs i-w .. i+w used to estimate heading/speed
+  min_heading_displacement_m: 3.0
+  context_half_window: 3        # neighbours used for the context-distance features
+
+# ---- Person 2 -------------------------------------------------------------
+training:
+  obs_stride: 2                 # use every 2nd observation when fitting (1 Hz data is highly redundant)
+  cv_folds: 5                   # GroupKFold over trip_id
+  slow_model_max_rows: 120000   # row cap for KNN / MLP / GNB fits (documented subsample)
+  threshold: 0.5                # probability threshold for precision/recall/F1
+  models: [logreg, gnb, knn, random_forest, extra_trees, hist_gb, lightgbm, mlp]
+
+bayes_opt:
+  n_trials: 30
+  cv_folds: 3
+  obs_stride: 4                 # coarser than training.obs_stride to keep each trial affordable
+  objective: top1_accuracy      # or neg_log_loss
+  timeout_s: null
+
+# ---- Person 3 -------------------------------------------------------------
+hmm:
+  emission: classifier          # classifier | gaussian | blend
+  emission_weight: 1.0          # weight of classifier log-prob when emission == blend
+  sigma_m: 8.0                  # Gaussian emission std-dev (used for gaussian/blend)
+  beta_m: 5.0                   # transition scale (Newson & Krumm 2009)
+  min_prob: 1.0e-6              # floor for classifier probabilities before log
+  gap_break_s: 60.0             # time gap that forces an HMM segment break
+  max_speed_mps: 70.0           # physical cap used to bound the route search
+  route_search_slack_m: 150.0   # extra search distance beyond the great-circle distance
+  route_search_factor: 3.0      # route search limit = factor * gc + slack (also capped by speed)
+  fill_gap_max_m: 5000.0        # longest shortest-path fill between decoded segments
+  tune_trips: 20
+  tune_trials: 25
+
+# ---- Person 4 -------------------------------------------------------------
+api:
+  host: 0.0.0.0
+  port: 8000
+  partition: eval_test          # overridden by env PATHSNAP_EVAL_DIR / PATHSNAP_API_PARTITION
+  max_network_segments: 4000    # road-network geometry returned for display

@@ -1,0 +1,14 @@
+# raw and cached data are NOT committed (dataset licence/size; evaluator data must stay private)
+/data
+
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.env
+*.egg-info/
+.DS_Store
+.ipynb_checkpoints/
+.streamlit/secrets.toml
+YOUR_TASKS.md
