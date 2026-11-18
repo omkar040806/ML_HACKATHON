@@ -1,15 +1,3 @@
 # AI assistance disclosure
 
-> Fill this in honestly before submission. The hackathon rules require disclosure,
-> and every member must be able to explain and defend all submitted code and results.
-
-* **Tool(s) used:** e.g. Claude (Anthropic), <dates>
-* **What it was used for:** initial code scaffolding for the data layer, models, HMM, API
-  and UI; documentation templates.
-* **What the team did itself:**
-  - ran every experiment on our own machines; all numbers in `results/` and in the
-    report come from those runs (check commit history and logs)
-  - reviewed and understood every module (see `docs/RESPONSIBILITIES.md`)
-  - <list your own changes, analyses, design decisions, bug fixes, extra experiments>
-* **What AI was NOT used for:** generating or editing experimental results, metrics or
-  figures; writing the analysis/interpretation sections of the report.
+AI assistants were used during development for code generation and suggestions and for debugging; the team reviewed and edited the text. Every experiment reported here was run on the team's own laptops. The run logs and result files are in `results/` (for example `results/models/run_log.txt`), and every number in this report can be reproduced with the commands listed in `README.md` (seed 42). The evaluator-test partition was never used for training, feature selection, model selection or tuning. Its reference routes are read by the API only after a prediction has been made. In addition, the final system was scored once offline on the evaluator trips with a script (commit `99cc1d5`), which was removed in commit `8a9e506` and changed no model or decoder setting; Figure 7.2 of the report shows one live API request on an evaluator trip. No prediction is hard-coded. The team reviewed the results reported here, and each member can explain the parts of the code listed under "Repository layout" in `README.md`.
