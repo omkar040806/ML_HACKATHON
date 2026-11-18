@@ -2,7 +2,8 @@
 
 Variants compared for every trip (same candidates, same model bundle):
   * classifier_only : independent argmax per observation, no sequence model
-  * hmm_classifier  : HMM with classifier-probability emissions (final system)
+  * hmm_tuned       : HMM with the tuned emission mode from best_hmm_params.json (deployed system)
+  * hmm_classifier  : HMM with pure classifier-probability emissions (comparison)
   * hmm_gaussian    : HMM with distance-only Gaussian emissions (Newson & Krumm
                       baseline, isolates the value of the classifier)
 
@@ -79,25 +80,28 @@ def main() -> None:
         variants = {}
         co = classifier_only(pt.cands, prob, len(pt.x))
         variants["classifier_only"] = (co, collapse(co), {"decode_s": 0.0}, 1, 0)
-        for mode in ("classifier", "gaussian"):
+        # hmm_tuned = the deployed decoder (emission mode from best_hmm_params.json, e.g. blend);
+        # hmm_classifier / hmm_gaussian are fixed-mode comparisons with the same beta and gap settings.
+        for name, mode in (("hmm_tuned", hmm_cfg["emission"]), ("hmm_classifier", "classifier"),
+                           ("hmm_gaussian", "gaussian")):
             r = mm.decode(pt.cands, prob, pt.x, pt.y, pt.t, emission_mode=mode)
-            variants[f"hmm_{mode}"] = (r.obs_arc, r.route, r.timings, r.n_segments, r.n_unfilled_gaps)
-            if mode == "classifier":
+            variants[name] = (r.obs_arc, r.route, r.timings, r.n_segments, r.n_unfilled_gaps)
+            if name == "hmm_tuned":
                 raw_cont = evaluate_prediction(r.obs_arc, r.route_raw, ref, lab, ref_route, pt.graph)["route_continuity"]
         for v, (obs_arc, route, tim, nseg, unf) in variants.items():
             m = evaluate_prediction(obs_arc, route, ref, lab, ref_route, pt.graph)
             m.update({"trip_id": tid, "variant": v, "n_obs": len(pt.x), "n_segments": nseg,
                       "n_unfilled_gaps": unf, "decode_s": tim["decode_s"], "classifier_s": clf_s,
                       "candidate_miss_rate": float(1 - pt.obs.ref_in_cands[pt.obs.labeled].mean())})
-            if v == "hmm_classifier":
+            if v == "hmm_tuned":
                 m["route_continuity_before_fill"] = raw_cont
             rows.append(m)
         (pred_dir / f"{tid}.json").write_text(json.dumps({
             "trip_id": tid, "model": bundle.model_name,
             "classifier_only_obs_arc": variants["classifier_only"][0].tolist(),
-            "hmm_obs_arc": variants["hmm_classifier"][0].tolist(),
-            "hmm_route": [int(a) for a in variants["hmm_classifier"][1]]}))
-        acc = {v: rows[-3 + k]["pointwise_accuracy"] for k, v in enumerate(variants)}
+            "hmm_obs_arc": variants["hmm_tuned"][0].tolist(),
+            "hmm_route": [int(a) for a in variants["hmm_tuned"][1]]}))
+        acc = {v: rows[-len(variants) + k]["pointwise_accuracy"] for k, v in enumerate(variants)}
         log.info("%s: %s", tid, ", ".join(f"{k}={v:.4f}" for k, v in acc.items()))
 
     df = pd.DataFrame(rows)
@@ -118,7 +122,7 @@ def main() -> None:
 
     for metric in ("pointwise_accuracy", "route_continuity", "route_len_f1"):
         p = df.pivot(index="trip_id", columns="variant", values=metric)
-        ax = p[["classifier_only", "hmm_gaussian", "hmm_classifier"]].plot.bar(figsize=(11, 4), width=0.8)
+        ax = p[["classifier_only", "hmm_gaussian", "hmm_classifier", "hmm_tuned"]].plot.bar(figsize=(11, 4), width=0.8)
         ax.set(title=f"{args.partition}: {metric} per trip", ylabel=metric,
                ylim=(max(0, np.nanmin(p.values) - 0.05), 1.0))
         ax.legend(loc="lower right"); plt.tight_layout()
