@@ -12,3 +12,6 @@ venv/
 .ipynb_checkpoints/
 .streamlit/secrets.toml
 YOUR_TASKS.md
+
+# downloaded bundles and the evaluator archive (evaluator data must stay private)
+*.zip
