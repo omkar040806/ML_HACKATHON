@@ -9,7 +9,8 @@ equirectangular* projection centred on the mean of its GPS points:
     x = R * (lon - lon0) * cos(lat0),   y = R * (lat - lat0)
 
 Within a few tens of kilometres of the centre the distance error is well
-below 1 % (``tests/test_geo.py`` checks it against the haversine formula),
+below 1 % (``tests/test_data_layer.py::test_projection_matches_haversine``
+checks it against the haversine formula),
 which is far smaller than GPS noise.  It is cheap, needs no extra dependency
 and works for every trip.  The EDA script reports each trip's extent so that
 the assumption can be verified.

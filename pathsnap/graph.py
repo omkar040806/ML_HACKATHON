@@ -7,7 +7,7 @@
   ``(from, to)`` pair, i.e. identical geometry).  They are indistinguishable
   from GPS, so each arc is mapped to a **canonical arc id** (the smallest id
   in its duplicate group).  Candidates, labels and metrics all use canonical
-  ids.  In train + student_test only 2 of 16 161 reference route entries use a
+  ids.  In train + student_test only 3 of 34 813 reference route entries use a
   non-canonical duplicate, so the information loss is negligible.
 * Shortest paths use a bounded Dijkstra with an LRU cache because the HMM
   issues many short queries from the same source nodes.
