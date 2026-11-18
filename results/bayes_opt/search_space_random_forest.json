@@ -1,0 +1,15 @@
+{
+ "model": "random_forest",
+ "objective": "top1_accuracy",
+ "cv": "GroupKFold(3) on trip_id, train only",
+ "obs_stride": 4,
+ "sampler": "TPESampler(seed=42)",
+ "pruner": "MedianPruner(n_startup_trials=5)",
+ "default_params": {
+  "n_estimators": 100,
+  "max_depth": 20,
+  "min_samples_leaf": 5,
+  "max_features": "sqrt"
+ },
+ "search_space_source": "def _ss_trees(t):\n    # Bounded on purpose: unlimited-depth forests with hundreds of trees were\n    # too slow to train inside CV and to serve from the API (inference cost).\n    return {\"n_estimators\": t.suggest_int(\"n_estimators\", 50, 250, step=50),\n            \"max_depth\": t.suggest_categorical(\"max_depth\", [8, 12, 16, 20, 24]),\n            \"min_samples_leaf\": t.suggest_int(\"min_samples_leaf\", 2, 50, log=True),\n            \"max_features\": t.suggest_categorical(\"max_features\", [\"sqrt\", 0.3, 0.5])}\n"
+}

@@ -1,0 +1,32 @@
+{
+ "model": "random_forest",
+ "objective": "top1_accuracy",
+ "best_value": 0.8775800748198185,
+ "best_trial": 15,
+ "best_params": {
+  "n_estimators": 150,
+  "max_depth": 12,
+  "min_samples_leaf": 4,
+  "max_features": "sqrt"
+ },
+ "raw_trial_params": {
+  "n_estimators": 150,
+  "max_depth": 12,
+  "min_samples_leaf": 4,
+  "max_features": "sqrt"
+ },
+ "user_attrs": {
+  "cv_fit_s_mean": 6.672363633333589,
+  "cv_log_loss_mean": 0.10152636939582409,
+  "cv_macro_f1_mean": 0.9277298115165552,
+  "cv_predict_ms_per_1k_obs_mean": 13.119641543008916,
+  "cv_route_continuity_mean": 0.6560613743730475,
+  "cv_top1_accuracy_mean": 0.8775800748198185,
+  "cv_top1_std": 0.03016377703116656,
+  "elapsed_s": 22.019497700006468
+ },
+ "n_trials_total": 30,
+ "n_complete": 15,
+ "n_pruned": 15,
+ "wall_time_this_run_s": 641.3134347000014
+}

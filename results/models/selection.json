@@ -1,0 +1,20 @@
+{
+ "selected_model": "random_forest",
+ "rule": "max mean CV top-1 accuracy; within 0.002 of best, lowest mean CV log loss",
+ "cv_top1_mean": 0.8764909140551888,
+ "cv_log_loss_mean": 0.1013323994285252,
+ "candidates_within_tolerance": [
+  "random_forest",
+  "lightgbm"
+ ],
+ "ranking_by_cv_top1": [
+  "random_forest",
+  "lightgbm",
+  "mlp",
+  "hist_gb",
+  "extra_trees",
+  "logreg",
+  "knn",
+  "gnb"
+ ]
+}

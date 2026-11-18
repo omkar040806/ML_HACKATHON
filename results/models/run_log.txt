@@ -1,0 +1,29 @@
+2026-11-18 15:37:18,859 INFO python 3.14.0, sklearn 1.9.1, seed 42, models ['logreg', 'gnb', 'knn', 'random_forest', 'extra_trees', 'hist_gb', 'lightgbm', 'mlp']
+2026-11-18 15:37:18,867 INFO loading cached train tables (04cca9037751)
+2026-11-18 15:37:19,094 INFO loading cached student_test tables (04cca9037751)
+2026-11-18 15:37:19,173 INFO train: 80 trips, 1085223 candidate rows; student_test: 10 trips
+2026-11-18 15:37:19,173 INFO === logreg (Linear / probabilistic)
+2026-11-18 15:37:26,972 INFO logreg CV top1 0.8666 +- 0.0281 | macroF1 0.9197 | logloss 0.1299 (8s)
+2026-11-18 15:37:28,352 INFO logreg student-test top1 0.8765 | macroF1 0.9224 | logloss 0.1206 | continuity 0.7600
+2026-11-18 15:37:28,411 INFO === gnb (Probabilistic (generative))
+2026-11-18 15:37:31,894 INFO gnb CV top1 0.8485 +- 0.0344 | macroF1 0.8578 | logloss 0.5886 (3s)
+2026-11-18 15:37:32,408 INFO gnb student-test top1 0.8594 | macroF1 0.8507 | logloss 0.5539 | continuity 0.7100
+2026-11-18 15:37:32,414 INFO === knn (Instance-based)
+2026-11-18 15:38:09,182 INFO knn CV top1 0.8592 +- 0.0322 | macroF1 0.9162 | logloss 0.1782 (37s)
+2026-11-18 15:38:16,756 INFO knn student-test top1 0.8709 | macroF1 0.9176 | logloss 0.1625 | continuity 0.7281
+2026-11-18 15:38:16,764 INFO === random_forest (Ensemble (bagging))
+2026-11-18 15:40:04,086 INFO random_forest CV top1 0.8765 +- 0.0260 | macroF1 0.9273 | logloss 0.1013 (107s)
+2026-11-18 15:40:23,872 INFO random_forest student-test top1 0.8930 | macroF1 0.9352 | logloss 0.0903 | continuity 0.8094
+2026-11-18 15:40:23,902 INFO === extra_trees (Ensemble (randomised trees))
+2026-11-18 15:40:54,042 INFO extra_trees CV top1 0.8698 +- 0.0299 | macroF1 0.9245 | logloss 0.1074 (30s)
+2026-11-18 15:41:01,637 INFO extra_trees student-test top1 0.8837 | macroF1 0.9267 | logloss 0.0989 | continuity 0.7594
+2026-11-18 15:41:01,644 INFO === hist_gb (Boosting)
+2026-11-18 15:41:32,459 INFO hist_gb CV top1 0.8702 +- 0.0245 | macroF1 0.9238 | logloss 0.1185 (31s)
+2026-11-18 15:41:38,203 INFO hist_gb student-test top1 0.8938 | macroF1 0.9330 | logloss 0.1004 | continuity 0.7810
+2026-11-18 15:41:38,210 INFO === lightgbm (Boosting)
+2026-11-18 15:41:58,162 INFO lightgbm CV top1 0.8750 +- 0.0241 | macroF1 0.9258 | logloss 0.1021 (20s)
+2026-11-18 15:42:02,503 INFO lightgbm student-test top1 0.8985 | macroF1 0.9352 | logloss 0.0883 | continuity 0.8027
+2026-11-18 15:42:02,510 INFO === mlp (Neural network)
+2026-11-18 15:43:54,007 INFO mlp CV top1 0.8739 +- 0.0238 | macroF1 0.9236 | logloss 0.1083 (111s)
+2026-11-18 15:44:09,804 INFO mlp student-test top1 0.8889 | macroF1 0.9286 | logloss 0.0959 | continuity 0.8037
+2026-11-18 15:44:09,867 INFO selected model: random_forest

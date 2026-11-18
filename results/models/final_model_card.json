@@ -1,0 +1,27 @@
+{
+ "model_name": "random_forest",
+ "variant": "tuned",
+ "params": {
+  "n_estimators": 150,
+  "max_depth": 12,
+  "min_samples_leaf": 4,
+  "max_features": "sqrt"
+ },
+ "seed": 42,
+ "trained_on": "train partition (80 trips), obs_stride=2",
+ "fit_rows": 532046,
+ "selection_rule": "higher CV top-1 accuracy (train GroupKFold)",
+ "cv_top1_mean": 0.8766352784024949,
+ "st_top1_accuracy": 0.8899399007055134,
+ "st_log_loss": 0.09152007493598095,
+ "config_candidates": {
+  "radius_m": 50.0,
+  "max_candidates": 8,
+  "sample_spacing_m": 10.0
+ },
+ "config_features": {
+  "heading_half_window": 2,
+  "min_heading_displacement_m": 3.0,
+  "context_half_window": 3
+ }
+}
