@@ -1,0 +1,6 @@
+# Laptop 2 (evaluator UI only).  Python >= 3.10.
+streamlit>=1.30        # tested 1.67
+folium>=0.15           # tested 1.0
+requests>=2.31
+pandas>=2.2
+pyyaml>=6.0            # imported by pathsnap/config.py via package import chain
