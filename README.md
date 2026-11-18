@@ -16,14 +16,14 @@ vehicle took from noisy GPS points. It works in four stages:
 | Path | Owner | Contents |
 |---|---|---|
 | `configs/pathsnap.yaml` | all (section owners) | every tunable setting |
-| `pathsnap/io.py, geo.py, graph.py, labels.py, candidates.py, features.py, dataset.py` | Person 1 | loading, projection, road graph, label alignment, candidates, features |
-| `pathsnap/models/` | Person 2 | model zoo, metrics, group CV, model bundle |
-| `pathsnap/hmm/` | Person 3 | emissions, transitions, Viterbi, decoder, route metrics |
-| `pathsnap/pipeline.py`, `pathsnap/viz/`, `api/`, `ui/` | Person 4 | inference pipeline, Folium, FastAPI, UI |
+| `pathsnap/io.py, geo.py, graph.py, labels.py, candidates.py, features.py, dataset.py` | Omkar | loading, projection, road graph, label alignment, candidates, features |
+| `pathsnap/models/` | Vedanta | model zoo, metrics, group CV, model bundle |
+| `pathsnap/hmm/` | Inchara | emissions, transitions, Viterbi, decoder, route metrics |
+| `pathsnap/pipeline.py`, `pathsnap/viz/`, `api/`, `ui/` | Mounika | inference pipeline, Folium, FastAPI, UI |
 | `scripts/` | per script header | runnable experiment steps |
 | `tests/` | per file | pytest suite (synthetic grid city; no dataset needed) |
 | `results/` | generated | EDA, model comparison, Bayesian optimisation, HMM results, maps (committed) |
-| `models/final_model.joblib` | Person 2 | exported model bundle (committed) |
+| `models/final_model.joblib` | Vedanta | exported model bundle (committed) |
 | `docs/` | | interfaces, responsibilities, deployment, report |
 | `data/` | git-ignored | raw trips and cached feature tables |
 
