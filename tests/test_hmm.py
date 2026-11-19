@@ -1,4 +1,6 @@
-"""Tests for Person 3 modules: emission, transition, viterbi, decoder, route metrics."""
+"""emission, transition, viterbi, decoder, route metrics.
+Using Newsons and krumms algorithm """
+
 import numpy as np
 import pytest
 
@@ -11,25 +13,21 @@ from pathsnap.hmm.transition import TransitionModel
 from pathsnap.hmm.viterbi import viterbi
 from pathsnap.io import load_trip_input
 
-
 def test_viterbi_prefers_consistent_path():
     em = [np.log([0.6, 0.4]), np.log([0.4, 0.6]), np.log([0.6, 0.4])]
     stay = np.log(np.array([[0.9, 0.1], [0.1, 0.9]]))
     path, starts = viterbi(em, [None, stay, stay])
     assert path == [0, 0, 0] and starts == [0]
 
-
 def test_viterbi_breaks_on_impossible_transition():
     em = [np.log([0.9, 0.1]), np.log([0.2, 0.8])]
     path, starts = viterbi(em, [None, np.full((2, 2), -np.inf)])
     assert starts == [0, 1] and path == [0, 1]
 
-
 def test_viterbi_forced_break():
     em = [np.array([0.0, -1.0]), np.array([-1.0, 0.0])]
     path, starts = viterbi(em, lambda s: None)
     assert path == [0, 1] and starts == [0, 1]
-
 
 def test_emission_modes():
     d, p = np.array([0.0, 10.0]), np.array([0.9, 0.0])
@@ -38,12 +36,10 @@ def test_emission_modes():
     with pytest.raises(ValueError):
         log_emission(d, None, "classifier")
 
-
 @pytest.fixture
 def grid(synthetic_trip):
     trip = load_trip_input(synthetic_trip["dir"])
     return RoadGraph.from_trip(trip), synthetic_trip
-
 
 def test_transition_penalises_wrong_direction(grid):
     g, info = grid
@@ -53,7 +49,6 @@ def test_transition_penalises_wrong_direction(grid):
     rd = tm.route_distances(np.array([a]), np.array([0.2]), np.array([a, rev]), np.array([0.3, 0.7]), gc=10, dt=1)
     assert rd[0, 0] == pytest.approx(10, abs=0.5) and rd[0, 1] > 50
 
-
 def test_decoder_recovers_route_with_perfect_probabilities(grid, cfg):
     g, info = grid
     pt = attach_labels(prepare_trip(load_trip_input(info["dir"]), cfg), info["route"], cfg)
@@ -61,7 +56,6 @@ def test_decoder_recovers_route_with_perfect_probabilities(grid, cfg):
     r = HMMMapMatcher(pt.graph, cfg["hmm"]).decode(pt.cands, prob, pt.x, pt.y, pt.t)
     m = evaluate_prediction(r.obs_arc, r.route, pt.obs.ref_arc.values, pt.obs.labeled.values, info["route"], pt.graph)
     assert m["pointwise_accuracy"] > 0.95 and m["route_continuity"] == 1.0 and m["route_f1"] > 0.9
-
 
 def test_hmm_beats_noisy_classifier(grid, cfg):
     g, info = grid
@@ -74,7 +68,6 @@ def test_hmm_beats_noisy_classifier(grid, cfg):
     assert (r.obs_arc[lab] == ref[lab]).mean() >= (co[lab] == ref[lab]).mean()
     assert continuity(r.route, pt.graph) >= continuity(collapse(co), pt.graph)
 
-
 def test_gap_forces_segment_break(tmp_path, cfg):
     from conftest import make_synthetic_trip
     info = make_synthetic_trip(tmp_path, gap=True)
@@ -82,13 +75,11 @@ def test_gap_forces_segment_break(tmp_path, cfg):
     r = HMMMapMatcher(pt.graph, cfg["hmm"]).decode(pt.cands, None, pt.x, pt.y, pt.t, emission_mode="gaussian")
     assert r.n_segments >= 2 and continuity(r.route, pt.graph) == 1.0   # gap filled by shortest path
 
-
 def test_fill_route_connects(grid):
     g, info = grid
     r = info["route"]
     filled, unf = fill_route([int(r[0]), int(r[3])], g, 5000)
     assert unf == 0 and continuity(filled, g) == 1.0 and filled[0] == r[0] and filled[-1] == r[3]
-
 
 def test_route_metrics_and_edit_similarity(grid):
     g, info = grid
